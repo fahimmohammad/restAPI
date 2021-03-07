@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"time"
 
 	"github.com/fahimsGit/restAPI/article"
 	"github.com/gin-contrib/cors"
@@ -11,16 +10,16 @@ import (
 )
 
 func main() {
+	gin.SetMode(gin.ReleaseMode)
 	router := gin.New()
-	router.Use(Logger())
-	v1 := router.Group("api/v1")
+	//router.Use(Logger())
+	v1 := router.Group("/api/v1")
 	config := cors.DefaultConfig()
 	config.AllowAllOrigins = true
 	config.AllowCredentials = true
-	config.AddAllowHeaders("Authorization")
+	//config.AddAllowHeaders("Authorization")
 	router.Use(cors.New(config))
 	fmt.Println("Startder")
-	router.Run(":8080")
 	session, err := mgo.Dial("localhost:27017")
 	if err != nil {
 		fmt.Println("Could not connect")
@@ -37,7 +36,8 @@ func initializeServices(router *gin.RouterGroup, session *mgo.Session) {
 	article.Init(router, session)
 
 }
-func Logger() gin.HandlerFunc {
+
+/*func Logger() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		t := time.Now()
 		fmt.Println("======================================>")
@@ -46,4 +46,4 @@ func Logger() gin.HandlerFunc {
 		since := time.Since(t)
 		fmt.Println("Time Took : " + since.String())
 	}
-}
+}*/

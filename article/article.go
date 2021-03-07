@@ -6,7 +6,6 @@ import (
 )
 
 // Init - initializes package
-
 func Init(router *gin.RouterGroup, session *mgo.Session) {
 	repository := startRepositoryService(session)
 	service := StartArticleService(repository)

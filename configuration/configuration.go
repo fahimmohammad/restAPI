@@ -2,7 +2,7 @@ package configuration
 
 // config
 const (
-	DbName      = "ARTICLE"
+	DbName      = "ARTICLEAPP"
 	AuthTable   = "user"
 	TargetTable = "article"
 )

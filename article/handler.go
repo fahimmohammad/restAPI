@@ -15,21 +15,21 @@ type handlerInterface interface {
 }
 
 type handlerFields struct {
-	articleService *Service
+	ArticleService *Service
 }
 type createArticleRequest struct {
-	article Article
+	Article Article
 }
 
 type createArticleResponse struct {
-	article Article `json:"article"`
-	err     string  `json:"err"`
+	Article Article `json:"article"`
+	Err     string  `json:"err"`
 }
 
 // CreateHTTPHandlers init
 func CreateHTTPHandlers(router *gin.RouterGroup, articleService *Service) {
 	h := handlerFields{
-		articleService: articleService,
+		ArticleService: articleService,
 	}
 
 	router.POST("article", h.createArticleHandler)
@@ -42,27 +42,27 @@ func CreateHTTPHandlers(router *gin.RouterGroup, articleService *Service) {
 func (h *handlerFields) createArticleHandler(ctx *gin.Context) {
 	var req createArticleRequest
 
-	if err := ctx.ShouldBindJSON(&req.article); err != nil {
+	if err := ctx.ShouldBindJSON(&req.Article); err != nil {
 		ctx.JSON(http.StatusInternalServerError, createArticleResponse{
-			article: Article{},
-			err:     "Error in data binding",
+			Article: Article{},
+			Err:     "Error in data binding",
 		})
 		return
 	}
 
-	postResult, err := h.articleService.repo.createArticle(req.article)
+	postResult, err := h.ArticleService.repo.createArticle(req.Article)
 
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, createArticleResponse{
-			article: Article{},
-			err:     err.Error(),
+			Article: Article{},
+			Err:     err.Error(),
 		})
 		return
 	}
 
 	ctx.JSON(http.StatusOK, createArticleResponse{
-		article: postResult,
-		err:     "",
+		Article: postResult,
+		Err:     "",
 	})
 	return
 }
