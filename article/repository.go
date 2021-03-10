@@ -3,6 +3,7 @@ package article
 import (
 	"github.com/fahimsGit/restAPI/configuration"
 	"github.com/globalsign/mgo"
+	"github.com/globalsign/mgo/bson"
 )
 
 type repository struct {
@@ -27,11 +28,20 @@ func (r *repository) createArticle(article Article) (Article, error) {
 	}
 	return article, nil
 }
+func (r *repository) readSingleArticle(articleID string) (Article, error) {
+	var article Article
+	coll := r.dbSession.DB(r.dbName).C(r.tableName)
+	err := coll.Find(bson.M{"id": articleID}).One(&article)
+	if err != nil {
 
+		return Article{}, err
+	}
+	return article, nil
+}
 func startRepositoryService(dbSession *mgo.Session) *repository {
 	return &repository{
 		dbSession: dbSession,
 		dbName:    configuration.DbName,
-		tableName: configuration.TargetTable,
+		tableName: configuration.ArticleTable,
 	}
 }
